@@ -219,18 +219,18 @@
             return true;
         }
 
-        // 익명의 username을 만듭니다.
-        function genRandomName(length) {
-            let result = '';
-            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let charactersLength = characters.length;
-            for (let i = 0; i < length; i++) {
-                let number = Math.random() * charactersLength;
-                let index = Math.floor(number);
-                result += characters.charAt(index);
-            }
-            return result;
-        }
+        // // 익명의 username을 만듭니다.
+        // function genRandomName(length) {
+        //     let result = '';
+        //     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        //     let charactersLength = characters.length;
+        //     for (let i = 0; i < length; i++) {
+        //         let number = Math.random() * charactersLength;
+        //         let index = Math.floor(number);
+        //         result += characters.charAt(index);
+        //     }
+        //     return result;
+        // }
 
         // 수정 버튼을 눌렀을 때, 기존 작성 내용을 textarea 에 전달합니다.
         // 숨길 버튼을 숨기고, 나타낼 버튼을 나타냅니다.
@@ -283,12 +283,15 @@
             let tempHtml = `<div class="card">
                 <!-- date/writer 영역 -->
                 <div class="metadata">
+                    <div id="${recordId}-recordId" class="recordId" style="margin-bottom: 10px;">
+                        ${recordId}
+                    </div>/
                     <div id="${recordId}-writedDate" class="writedDate" style="margin-bottom: 10px;">
                         ${writedDate}
-                    </div>
+                    </div>/
                     <div id="${recordId}-writer" class="writer" style="margin-bottom: 10px;">
                         ${writer}
-                    </div>
+                    </div>/
                     <div id="${recordId}-title" class="title" style="margin-bottom: 10px;">
                         ${title}
                     </div>
@@ -330,8 +333,9 @@
             || isValidContents(contents) == false) {
                 return;
             }
+
             // 3. genRandomName 함수를 통해 익명의 username을 만듭니다.
-            let username = writer//genRandomName(10);
+            //let username = genRandomName(10);
 
             // 4. 전달할 data JSON으로 만듭니다.
             let data = {'writer': writer, 'password': password, 'title': title, 'writedDate': writedDate, 'contents': contents};
@@ -350,23 +354,30 @@
         }
 
         // 메모를 수정합니다.
-        function submitEdit(id) {
+        function submitEdit(recordId) {
             // 1. 작성 대상 메모의 username과 contents 를 확인합니다.
-            let username = $(`#${id}-username`).text().trim();
-            let contents = $(`#${id}-textarea`).val().trim();
+            let username = $(`#${recordId}-username`).text().trim();
+            let password = $(`#${recordId}-password`).val().trim();
+            let title = $(`#${recordId}-title`).val().trim();
+            let writedDate = $(`#${recordId}-writedDate`).val().trim();
+            let contents = $(`#${recordId}-textarea`).val().trim();
 
             // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
-            if (isValidContents(contents) == false) {
+            if (isValidContents(writer) == false
+                || isValidContents(password) == false
+                || isValidContents(title) == false
+                || isValidContents(writedDate) == false
+                || isValidContents(contents) == false) {
                 return;
             }
 
             // 3. 전달할 data JSON으로 만듭니다.
-            let data = {'username': username, 'contents': contents};
+            let data = {'writer': writer, 'password': password, 'title': title, 'writedDate': writedDate, 'contents': contents};
 
             // 4. PUT /api/memos/{id} 에 data를 전달합니다.
             $.ajax({
                 type: "PUT",
-                url: `/api/memos/${id}`,
+                url: `/api/memos/${recordId}`,
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
@@ -377,11 +388,12 @@
         }
 
         // 메모를 삭제합니다.
-        function deleteOne(id) {
+        function deleteOne(recordId) {
+            console.log(recordId);
             // 1. DELETE /api/memos/{id} 에 요청해서 메모를 삭제합니다.
             $.ajax({
                 type: "DELETE",
-                url: `/api/memos/${id}`,
+                url: `/api/memos/${recordId}`,
                 success: function (response) {
                     alert('메시지 삭제에 성공하였습니다.');
                     window.location.reload();

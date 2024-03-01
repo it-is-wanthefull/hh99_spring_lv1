@@ -48,8 +48,8 @@ public class MemoController {
                 keyHolder);
 
         // DB Insert 후 받아온 기본키 확인
-        Long id = keyHolder.getKey().longValue();
-        memo.setId(id);
+        Long recordId= keyHolder.getKey().longValue();
+        memo.setRecordId(recordId);
 
         // Entity -> ResponseDto
         MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
@@ -77,49 +77,52 @@ public class MemoController {
         });
     }
 
-    @PutMapping("/memos/{id}")
-    public Long updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
+    @PutMapping("/memos/{recordId}")
+    public Long updateMemo(@PathVariable Long recordId, @RequestBody MemoRequestDto requestDto) {
         // 해당 메모가 DB에 존재하는지 확인
-        Memo memo = findById(id);
+        Memo memo = findById(recordId);
         if(memo != null) {
             // memo 내용 수정
-            String sql = "UPDATE memo SET username = ?, contents = ? WHERE id = ?";
-            jdbcTemplate.update(sql, requestDto.getWriter(), requestDto.getContents(), id);
+            String sql = "UPDATE memo SET writer = ?, password = ?, title = ?, writedDate = ?, contents = ? WHERE recordId = ?";
+            jdbcTemplate.update(sql, requestDto.getWriter(), requestDto.getPassword(), requestDto.getTitle(), requestDto.getWritedDate(), requestDto.getContents(), recordId);
 
-            return id;
+            return recordId;
         } else {
             throw new IllegalArgumentException("선택한 메모는 존재하지 않습니다.");
         }
     }
 
-    @DeleteMapping("/memos/{id}")
-    public Long deleteMemo(@PathVariable Long id) {
+    @DeleteMapping("/memos/{recordId}")
+    public Long deleteMemo(@PathVariable Long recordId) {
         // 해당 메모가 DB에 존재하는지 확인
-        Memo memo = findById(id);
+        Memo memo = findById(recordId);
         if(memo != null) {
             // memo 삭제
-            String sql = "DELETE FROM memo WHERE id = ?";
-            jdbcTemplate.update(sql, id);
+            String sql = "DELETE FROM record WHERE recordId = ?";
+            jdbcTemplate.update(sql, recordId);
 
-            return id;
+            return recordId;
         } else {
             throw new IllegalArgumentException("선택한 메모는 존재하지 않습니다.");
         }
     }
 
-    private Memo findById(Long id) {
+    private Memo findById(Long recordId) {
         // DB 조회
-        String sql = "SELECT * FROM memo WHERE id = ?";
+        String sql = "SELECT * FROM record WHERE recordId = ?";
 
         return jdbcTemplate.query(sql, resultSet -> {
             if(resultSet.next()) {
                 Memo memo = new Memo();
-                memo.setWriter(resultSet.getString("username"));
+                memo.setWriter(resultSet.getString("writer"));
+                memo.setPassword(resultSet.getString("password"));
+                memo.setTitle(resultSet.getString("title"));
+                memo.setWritedDate(resultSet.getString("writedDate"));
                 memo.setContents(resultSet.getString("contents"));
                 return memo;
             } else {
                 return null;
             }
-        }, id);
+        }, recordId);
     }
 }

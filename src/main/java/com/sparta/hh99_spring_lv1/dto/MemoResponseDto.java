@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class MemoResponseDto {
-    private Long id;
+    private Long recordId;
     private String writer;
     private String password;
     private String title;
@@ -15,7 +15,7 @@ public class MemoResponseDto {
     private String contents;
 
     public MemoResponseDto(Memo memo) {
-        this.id = memo.getId();
+        this.recordId = memo.getRecordId();
         this.writer = memo.getWriter();
         this.password = memo.getPassword();
         this.title = memo.getTitle();

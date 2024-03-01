@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Memo {
-    private Long id;
+    private Long recordId;
     private String writer;
     private String password;
     private String title;
