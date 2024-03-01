@@ -1,24 +1,25 @@
 package com.sparta.hh99_spring_lv1.dto;
 
 import com.sparta.hh99_spring_lv1.entity.Memo;
-import com.sparta.hh99_spring_lv1.entity.Memo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class MemoResponseDto {
     private Long id;
-    private String username;
+    private String writer;
+    private String password;
+    private String title;
+    private String writedDate;
     private String contents;
 
     public MemoResponseDto(Memo memo) {
         this.id = memo.getId();
-        this.username = memo.getUsername();
+        this.writer = memo.getWriter();
+        this.password = memo.getPassword();
+        this.title = memo.getTitle();
+        this.writedDate = memo.getWritedDate();
         this.contents = memo.getContents();
-    }
-
-    public MemoResponseDto(Long id, String username, String contents) {
-        this.id = id;
-        this.username = username;
-        this.contents = contents;
     }
 }

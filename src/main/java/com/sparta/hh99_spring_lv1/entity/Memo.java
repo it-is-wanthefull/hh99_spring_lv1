@@ -10,16 +10,25 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Memo {
     private Long id;
-    private String username;
+    private String writer;
+    private String password;
+    private String title;
+    private String writedDate;
     private String contents;
 
     public Memo(MemoRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+        this.writer = requestDto.getWriter();
+        this.password = requestDto.getPassword();
+        this.title = requestDto.getTitle();
+        this.writedDate = requestDto.getWritedDate();
         this.contents = requestDto.getContents();
     }
 
     public void update(MemoRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+        this.writer = requestDto.getWriter();
+        this.password = requestDto.getPassword();
+        this.title = requestDto.getTitle();
+        this.writedDate = requestDto.getWritedDate();
         this.contents = requestDto.getContents();
     }
 }

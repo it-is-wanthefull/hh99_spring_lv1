@@ -4,6 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class MemoRequestDto {
-    private String username;
+    private String writer;
+    private String password;
+    private String title;
+    private String writedDate;
     private String contents;
 }
