@@ -83,7 +83,7 @@ public class MemoController {
         Memo memo = findById(recordId);
         if(memo != null) {
             // memo 내용 수정
-            String sql = "UPDATE memo SET writer = ?, password = ?, title = ?, writedDate = ?, contents = ? WHERE recordId = ?";
+            String sql = "UPDATE record SET writer = ?, password = ?, title = ?, writedDate = ?, contents = ? WHERE recordId = ?";
             jdbcTemplate.update(sql, requestDto.getWriter(), requestDto.getPassword(), requestDto.getTitle(), requestDto.getWritedDate(), requestDto.getContents(), recordId);
 
             return recordId;

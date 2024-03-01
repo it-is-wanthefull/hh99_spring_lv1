@@ -219,25 +219,12 @@
             return true;
         }
 
-        // // 익명의 username을 만듭니다.
-        // function genRandomName(length) {
-        //     let result = '';
-        //     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        //     let charactersLength = characters.length;
-        //     for (let i = 0; i < length; i++) {
-        //         let number = Math.random() * charactersLength;
-        //         let index = Math.floor(number);
-        //         result += characters.charAt(index);
-        //     }
-        //     return result;
-        // }
-
         // 수정 버튼을 눌렀을 때, 기존 작성 내용을 textarea 에 전달합니다.
         // 숨길 버튼을 숨기고, 나타낼 버튼을 나타냅니다.
         function editPost(id) {
             showEdits(id);
             let contents = $(`#${id}-contents`).text().trim();
-            $(`#${id}-textarea`).val(contents);
+            $(`#${id}-editcontents`).val(contents);
         }
 
         function showEdits(id) {
@@ -283,9 +270,6 @@
             let tempHtml = `<div class="card">
                 <!-- date/writer 영역 -->
                 <div class="metadata">
-                    <div id="${recordId}-recordId" class="recordId" style="margin-bottom: 10px;">
-                        ${recordId}
-                    </div>/
                     <div id="${recordId}-writedDate" class="writedDate" style="margin-bottom: 10px;">
                         ${writedDate}
                     </div>/
@@ -302,7 +286,11 @@
                         ${contents}
                     </div>
                     <div id="${recordId}-editarea" class="edit">
-                        <textarea id="${recordId}-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+                        <input type="text" name="editwriter"     id="${recordId}-editwriter"     value="${writer}" /><br>
+                        <input type="text" name="editpassword"   id="${recordId}-editpassword"   value="${password}" /><br>
+                        <input type="text" name="edittitle"      id="${recordId}-edittitle"      value="${title}" /><br>
+                        <input type="text" name="editwritedDate" id="${recordId}-editwritedDate" value="${writedDate}" /><br>
+                        <textarea id="${recordId}-editcontents" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
                     </div>
                 </div>
                 <!-- 버튼 영역-->
@@ -356,11 +344,11 @@
         // 메모를 수정합니다.
         function submitEdit(recordId) {
             // 1. 작성 대상 메모의 username과 contents 를 확인합니다.
-            let username = $(`#${recordId}-username`).text().trim();
-            let password = $(`#${recordId}-password`).val().trim();
-            let title = $(`#${recordId}-title`).val().trim();
-            let writedDate = $(`#${recordId}-writedDate`).val().trim();
-            let contents = $(`#${recordId}-textarea`).val().trim();
+            let writer = $(`#${recordId}-editwriter`).val().trim();
+            let password = $(`#${recordId}-editpassword`).val().trim();
+            let title = $(`#${recordId}-edittitle`).val().trim();
+            let writedDate = $(`#${recordId}-editwritedDate`).val().trim();
+            let contents = $(`#${recordId}-editcontents`).val().trim();
 
             // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
             if (isValidContents(writer) == false
