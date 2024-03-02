@@ -222,9 +222,9 @@
             width: 50%;
             height: 50%;
             position: fixed;
-            top: 60%;
+            top: 70%;
             left: 50%;
-            transform: translate(-50%, -60%);
+            transform: translate(-50%, -70%);
         }
 
         /* 모달 컨텐츠 스타일 수정 */
@@ -297,7 +297,7 @@
             // 2. 메모 목록을 불러와서 HTML로 붙입니다.
             $.ajax({
                 type: 'GET',
-                url: '/api/memos',
+                url: '/record/read/all',
                 success: function (response) {
                     for (let i = 0; i < response.length; i++) {
                         let message = response[i];
@@ -399,10 +399,10 @@
             // 4. 전달할 data JSON으로 만듭니다.
             let data = {'writer': writer, 'password': password, 'title': title, 'writedDate': writedDate, 'contents': contents};
 
-            // 5. POST /api/memos 에 data를 전달합니다.
+            // 5. POST /record/memos 에 data를 전달합니다.
             $.ajax({
                 type: "POST",
-                url: "/api/memos",
+                url: "/record/create",
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
@@ -437,10 +437,10 @@
             // 3. 전달할 data JSON으로 만듭니다.
             let data = {'writer': writer, 'password': password, 'title': title, 'writedDate': writedDate, 'contents': contents};
 
-            // 4. PUT /api/memos/{id} 에 data를 전달합니다.
+            // 4. PUT /record/memos/{id} 에 data를 전달합니다.
             $.ajax({
                 type: "PUT",
-                url: `/api/memos/${recordId}`,
+                url: `/record/update/${recordId}`,
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
@@ -464,7 +464,7 @@
                     // 비밀번호가 일치하면 삭제를 수행합니다.
                     $.ajax({
                         type: "DELETE",
-                        url: `/api/memos/${recordId}`,
+                        url: `/record/delete/${recordId}`,
                         success: function (response) {
                             alert('메시지 삭제에 성공하였습니다.');
                             window.location.reload();

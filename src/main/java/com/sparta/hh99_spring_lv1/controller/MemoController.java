@@ -16,7 +16,7 @@ import java.sql.Statement;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/record")
 public class MemoController {
 
     private final JdbcTemplate jdbcTemplate;
@@ -25,7 +25,7 @@ public class MemoController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @PostMapping("/memos")
+    @PostMapping("/create")
     public MemoResponseDto createMemo(@RequestBody MemoRequestDto requestDto) {
         // RequestDto -> Entity
         Memo memo = new Memo(requestDto);
@@ -57,7 +57,7 @@ public class MemoController {
         return memoResponseDto;
     }
 
-    @GetMapping("/memos")
+    @GetMapping("/read/all")
     public List<MemoResponseDto> getMemos() {
         // DB 조회
         String sql = "SELECT * FROM record ORDER BY writedDate DESC";
@@ -77,7 +77,7 @@ public class MemoController {
         });
     }
 
-    @PutMapping("/memos/{recordId}")
+    @PutMapping("/update/{recordId}")
     public Long updateMemo(@PathVariable Long recordId, @RequestBody MemoRequestDto requestDto) {
         // 해당 메모가 DB에 존재하는지 확인
         Memo memo = findById(recordId);
@@ -92,7 +92,7 @@ public class MemoController {
         }
     }
 
-    @DeleteMapping("/memos/{recordId}")
+    @DeleteMapping("/delete/{recordId}")
     public Long deleteMemo(@PathVariable Long recordId) {
         // 해당 메모가 DB에 존재하는지 확인
         Memo memo = findById(recordId);
