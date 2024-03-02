@@ -1,6 +1,6 @@
 package com.sparta.hh99_spring_lv1.entity;
 
-import com.sparta.hh99_spring_lv1.dto.MemoRequestDto;
+import com.sparta.hh99_spring_lv1.dto.RecordRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Memo {
+public class Record {
     private Long recordId;
     private String writer;
     private String password;
@@ -16,7 +16,7 @@ public class Memo {
     private String writedDate;
     private String contents;
 
-    public Memo(MemoRequestDto requestDto) {
+    public Record(RecordRequestDto requestDto) {
         this.writer = requestDto.getWriter();
         this.password = requestDto.getPassword();
         this.title = requestDto.getTitle();
@@ -24,7 +24,7 @@ public class Memo {
         this.contents = requestDto.getContents();
     }
 
-    public void update(MemoRequestDto requestDto) {
+    public void update(RecordRequestDto requestDto) {
         this.writer = requestDto.getWriter();
         this.password = requestDto.getPassword();
         this.title = requestDto.getTitle();

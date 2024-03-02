@@ -1,8 +1,8 @@
 package com.sparta.hh99_spring_lv1.controller;
 
-import com.sparta.hh99_spring_lv1.dto.MemoRequestDto;
-import com.sparta.hh99_spring_lv1.dto.MemoResponseDto;
-import com.sparta.hh99_spring_lv1.entity.Memo;
+import com.sparta.hh99_spring_lv1.dto.RecordRequestDto;
+import com.sparta.hh99_spring_lv1.dto.RecordResponseDto;
+import com.sparta.hh99_spring_lv1.entity.Record;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,18 +17,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/record")
-public class MemoController {
+public class RecordController {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public MemoController(JdbcTemplate jdbcTemplate) {
+    public RecordController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @PostMapping("/create")
-    public MemoResponseDto createMemo(@RequestBody MemoRequestDto requestDto) {
+    public RecordResponseDto createMemo(@RequestBody RecordRequestDto requestDto) {
         // RequestDto -> Entity
-        Memo memo = new Memo(requestDto);
+        Record memo = new Record(requestDto);
 
         // DB 저장
         KeyHolder keyHolder = new GeneratedKeyHolder(); // 기본 키를 반환받기 위한 객체
@@ -52,19 +52,19 @@ public class MemoController {
         memo.setRecordId(recordId);
 
         // Entity -> ResponseDto
-        MemoResponseDto memoResponseDto = new MemoResponseDto(memo);
+        RecordResponseDto memoResponseDto = new RecordResponseDto(memo);
 
         return memoResponseDto;
     }
 
     @GetMapping("/read/all")
-    public List<MemoResponseDto> getMemos() {
+    public List<RecordResponseDto> getMemos() {
         // DB 조회
         String sql = "SELECT * FROM record ORDER BY writedDate DESC";
 
-        return jdbcTemplate.query(sql, new RowMapper<MemoResponseDto>() {
+        return jdbcTemplate.query(sql, new RowMapper<RecordResponseDto>() {
             @Override
-            public MemoResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            public RecordResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
                 Long recordId = rs.getLong("recordId");
                 String writer = rs.getString("writer");
@@ -72,15 +72,15 @@ public class MemoController {
                 String title = rs.getString("title");
                 String writedDate = rs.getString("writedDate");
                 String contents = rs.getString("contents");
-                return new MemoResponseDto(recordId, writer, password, title, writedDate, contents);
+                return new RecordResponseDto(recordId, writer, password, title, writedDate, contents);
             }
         });
     }
 
     @PutMapping("/update/{recordId}")
-    public Long updateMemo(@PathVariable Long recordId, @RequestBody MemoRequestDto requestDto) {
+    public Long updateMemo(@PathVariable Long recordId, @RequestBody RecordRequestDto requestDto) {
         // 해당 메모가 DB에 존재하는지 확인
-        Memo memo = findById(recordId);
+        Record memo = findById(recordId);
         if(memo != null) {
             // memo 내용 수정
             String sql = "UPDATE record SET writer = ?, password = ?, title = ?, writedDate = ?, contents = ? WHERE recordId = ?";
@@ -95,7 +95,7 @@ public class MemoController {
     @DeleteMapping("/delete/{recordId}")
     public Long deleteMemo(@PathVariable Long recordId) {
         // 해당 메모가 DB에 존재하는지 확인
-        Memo memo = findById(recordId);
+        Record memo = findById(recordId);
         if(memo != null) {
             // memo 삭제
             String sql = "DELETE FROM record WHERE recordId = ?";
@@ -107,13 +107,13 @@ public class MemoController {
         }
     }
 
-    private Memo findById(Long recordId) {
+    private Record findById(Long recordId) {
         // DB 조회
         String sql = "SELECT * FROM record WHERE recordId = ?";
 
         return jdbcTemplate.query(sql, resultSet -> {
             if(resultSet.next()) {
-                Memo memo = new Memo();
+                Record memo = new Record();
                 memo.setWriter(resultSet.getString("writer"));
                 memo.setPassword(resultSet.getString("password"));
                 memo.setTitle(resultSet.getString("title"));
