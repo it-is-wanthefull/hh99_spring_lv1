@@ -60,7 +60,7 @@ public class MemoController {
     @GetMapping("/memos")
     public List<MemoResponseDto> getMemos() {
         // DB 조회
-        String sql = "SELECT * FROM record";
+        String sql = "SELECT * FROM record ORDER BY writedDate DESC";
 
         return jdbcTemplate.query(sql, new RowMapper<MemoResponseDto>() {
             @Override
